@@ -1,0 +1,19 @@
+{
+  "python.languageServer": "Pylance",
+  "python.analysis.typeCheckingMode": "off",
+  "pyrefly.enable": false,
+  "python.defaultInterpreterPath": "C:\\Users\\Abhinay\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+  "python.analysis.extraPaths": [
+    "C:\\Users\\Abhinay\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages"
+  ],
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportMissingImports": "none",
+    "reportMissingModuleSource": "none",
+    "reportUndefinedVariable": "none"
+  },
+  "files.exclude": {
+    "**/__pyrefly_virtual__": true,
+    "**/__pycache__": true,
+    "**/*.pyc": true
+  }
+}

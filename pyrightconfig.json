@@ -1,0 +1,17 @@
+{
+  "exclude": [
+    "**/__pyrefly_virtual__/**",
+    "**/__pycache__/**",
+    "**/node_modules/**",
+    "**/.next/**"
+  ],
+  "ignore": [
+    "**/__pyrefly_virtual__/**"
+  ],
+  "reportMissingImports": "none",
+  "reportMissingModuleSource": "none",
+  "reportUndefinedVariable": "none",
+  "pythonVersion": "3.14",
+  "pythonPath": "C:/Users/Abhinay/AppData/Local/Python/pythoncore-3.14-64/python.exe",
+  "venvPath": "C:/Users/Abhinay/AppData/Local/Python/pythoncore-3.14-64"
+}

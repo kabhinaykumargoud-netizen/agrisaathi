@@ -1,0 +1,13 @@
+# Pyrefly configuration — suppress all virtual/in-memory analysis errors
+project_excludes = [
+  "**/__pyrefly_virtual__/**",
+  "**/.venv/**",
+  "**/node_modules/**",
+  "**/__pycache__/**",
+]
+
+# Use the correct Python interpreter
+python_interpreter = "C:/Users/Abhinay/AppData/Local/Python/pythoncore-3.14-64/python.exe"
+
+# Turn off strict type checking
+type_check_only_files_in_project = true

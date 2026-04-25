@@ -1,0 +1,36 @@
+# ─── Node / Frontend ──────────────────────────────────
+node_modules/
+.next/
+out/
+dist/
+.turbo/
+*.tsbuildinfo
+npm-debug.log*
+
+# ─── Python / Backend ─────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+env/
+venv/
+*.egg-info/
+
+# ─── Secrets / Environment ────────────────────────────
+.env
+.env.local
+.env*.local
+agrisaathi-ps08-features/mlbackend/.env
+agrisaathi-frontend/.env.local
+
+# ─── System ───────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+
+# ─── Build artifacts ──────────────────────────────────
+model.joblib
+agrisaathi-frontend.zip

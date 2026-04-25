@@ -1,0 +1,155 @@
+/* ══════════════════════════════════════
+   AGRISAATHI DESIGN MASTER - v2.5
+   Awwwards Suite: Liquid | Skeuo | Brutal
+   ══════════════════════════════════════ */
+
+:root {
+    --vibrant-green: #00FF7F;
+    --vibrant-yellow: #FFFF00;
+    --pure-white: #FFFFFF;
+    --deep-obsidian: #05080A;
+}
+
+/* 1. LIQUID GLASS */
+.liquid-glass {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+}
+
+/* 2. SKEUO-CLAY DEPTH */
+.skeuo-clay {
+    background: #0D1117;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 255, 127, 0.2);
+    box-shadow:
+        10px 10px 30px rgba(0, 0, 0, 0.5),
+        -5px -5px 15px rgba(255, 255, 255, 0.02),
+        inset 2px 2px 5px rgba(255, 255, 255, 0.05);
+}
+
+/* 3. AETHER-SOFT (Refined Interactive) */
+.aether-soft {
+    border: 1px solid rgba(0, 255, 127, 0.4);
+    background: rgba(13, 17, 23, 0.6);
+    box-shadow: 0 0 20px rgba(0, 255, 127, 0.05);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.aether-soft:hover {
+    border-color: var(--vibrant-green);
+    background: rgba(0, 255, 127, 0.08);
+    box-shadow: 0 0 30px rgba(0, 255, 127, 0.1);
+}
+
+/* 4. 3D FLIP SYSTEM */
+.flip-card {
+    perspective: 2000px;
+    height: 420px;
+    cursor: pointer;
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    inset: 0;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    padding: 2.5rem;
+}
+
+.flip-card-front {
+    z-index: 2;
+}
+
+.flip-card-back {
+    transform: rotateY(180deg);
+    z-index: 1;
+}
+
+/* 5. VELOCITY SKEW HELPER */
+.page-content {
+    will-change: transform;
+}
+
+/* 6. CINEMATIC REVEAL MASKS */
+.reveal-mask {
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 1.5s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.reveal-mask.active {
+    clip-path: inset(0 0 0% 0);
+}
+
+/* 7. AUTH GRID (Exclusive to Auth Pages) */
+.auth-grid-overlay {
+    position: fixed;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(0, 255, 127, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 127, 0.06) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.scanning-bar {
+    position: fixed;
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(to bottom, transparent, var(--vibrant-green), transparent);
+    z-index: 2;
+    animation: scan-loop 8s linear infinite;
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+@keyframes scan-loop {
+    0% {
+        top: -10%;
+    }
+
+    100% {
+        top: 110%;
+    }
+}
+
+/* 8. TYPOGRAPHY GEMS */
+.text-high-vis {
+    color: var(--vibrant-yellow) !important;
+    text-shadow: 0 0 25px rgba(255, 255, 0, 0.4);
+}
+
+.text-bright-white {
+    color: var(--vibrant-yellow) !important;
+    text-shadow: 0 0 15px rgba(255, 255, 0, 0.2);
+}
+
+.sub-label {
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: var(--vibrant-green);
+    margin-bottom: 1rem;
+    display: block;
+}

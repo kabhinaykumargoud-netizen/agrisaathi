@@ -1,0 +1,7 @@
+{
+  "name": "agrisaathi-root",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "cd agrisaathi-frontend && npm run dev"
+  }
+}

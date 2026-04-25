@@ -1,0 +1,21 @@
+# ─── Python backend ───────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.env
+*.env
+mlbackend/.env
+.venv/
+env/
+venv/
+
+# ─── Logs / temp ──────────────────────────────────────
+*.log
+*.tmp
+*.sqlite3
+model.joblib
+
+# ─── Training data (large) ────────────────────────────
+training_data.json
