@@ -98,8 +98,69 @@ export default function ModulePanel({ onSubmit }: Props) {
 
 // ── MODULE COMPONENTS ──
 
+function ImageUploadField({ onImageSelect }: { onImageSelect: (b64: string | null) => void }) {
+    const [preview, setPreview] = useState<string | null>(null);
+
+    const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) {
+            setPreview(null);
+            onImageSelect(null);
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement("canvas");
+                const MAX_SIZE = 800;
+                let width = img.width;
+                let height = img.height;
+                if (width > height) {
+                    if (width > MAX_SIZE) {
+                        height *= MAX_SIZE / width;
+                        width = MAX_SIZE;
+                    }
+                } else {
+                    if (height > MAX_SIZE) {
+                        width *= MAX_SIZE / height;
+                        height = MAX_SIZE;
+                    }
+                }
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext("2d");
+                ctx?.drawImage(img, 0, 0, width, height);
+                const dataUrl = canvas.toDataURL("image/jpeg", 0.7);
+                setPreview(dataUrl);
+                onImageSelect(dataUrl);
+            };
+            img.src = event.target?.result as string;
+        };
+        reader.readAsDataURL(file);
+    };
+
+    return (
+        <div style={{ marginTop: "0.75rem" }}>
+            <label style={{ ...labelStyle, display: "flex", justifyContent: "space-between" }}>
+                <span>📷 Upload Photo (Optional)</span>
+                {preview && <span style={{ color: "#ff4444", cursor: "pointer" }} onClick={() => { setPreview(null); onImageSelect(null); }}>Remove</span>}
+            </label>
+            {!preview ? (
+                <input type="file" accept="image/*" onChange={handleFile} style={{
+                    ...inputStyle, padding: "0.5rem", cursor: "pointer", border: `1px dashed ${C.dim}`, background: "transparent", color: C.dim
+                }} />
+            ) : (
+                <img src={preview} alt="preview" style={{ width: "100%", height: "120px", objectFit: "cover", borderRadius: "8px", border: `1px solid ${C.border}` }} />
+            )}
+        </div>
+    );
+}
+
+
 function PestPanel({ onSubmit }: Props) {
-    const [f, setF] = useState({ crop: "rice", growth_stage: "Vegetative", temperature: "30", humidity: "80", rainfall_last_week: "20", symptoms_observed: "", region: "Central India" });
+    const [f, setF] = useState({ crop: "rice", growth_stage: "Vegetative", temperature: "30", humidity: "80", rainfall_last_week: "20", symptoms_observed: "", region: "Central India", image_base64: null as string | null });
     const sel = (k: string) => (e: React.ChangeEvent<HTMLSelectElement>) => setF(p => ({ ...p, [k]: e.target.value }));
     const inp = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setF(p => ({ ...p, [k]: e.target.value }));
 
@@ -129,6 +190,7 @@ function PestPanel({ onSubmit }: Props) {
                 <textarea style={{ ...inputStyle, resize: "none", height: "60px" } as React.CSSProperties}
                     value={f.symptoms_observed} onChange={inp("symptoms_observed")} placeholder="e.g. white spots on leaves, stem turning yellow..." />
             </Field>
+            <ImageUploadField onImageSelect={(b64) => setF(p => ({ ...p, image_base64: b64 }))} />
             <button style={btnStyle} onClick={() =>
                 onSubmit(`pest diagnosis for ${f.crop} at ${f.growth_stage} stage in ${f.region} showing ${f.symptoms_observed || 'no specific symptoms'}`, { module: "pest", ...f, temperature: parseFloat(f.temperature), humidity: parseFloat(f.humidity), rainfall_last_week: parseFloat(f.rainfall_last_week) })}>
                 ⚡ Analyze Pest Threat
@@ -138,7 +200,7 @@ function PestPanel({ onSubmit }: Props) {
 }
 
 function BirdPanel({ onSubmit }: Props) {
-    const [f, setF] = useState({ crop: "wheat", growth_stage: "Fruiting", region: "North India", bird_type: "Unknown", damage_observed: "" });
+    const [f, setF] = useState({ crop: "wheat", growth_stage: "Fruiting", region: "North India", bird_type: "Unknown", damage_observed: "", image_base64: null as string | null });
     const sel = (k: string) => (e: React.ChangeEvent<HTMLSelectElement>) => setF(p => ({ ...p, [k]: e.target.value }));
     const inp = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setF(p => ({ ...p, [k]: e.target.value }));
 
@@ -170,6 +232,7 @@ function BirdPanel({ onSubmit }: Props) {
                 <textarea style={{ ...inputStyle, resize: "none", height: "60px" } as React.CSSProperties}
                     value={f.damage_observed} onChange={inp("damage_observed")} placeholder="e.g. seeds eaten from pods, fruits pecked..." />
             </Field>
+            <ImageUploadField onImageSelect={(b64) => setF(p => ({ ...p, image_base64: b64 }))} />
             <button style={btnStyle} onClick={() =>
                 onSubmit(`bird protection for ${f.crop} against ${f.bird_type} in ${f.region}`, { module: "bird", ...f })}>
                 ⚡ Get Bird Protection Plan
@@ -179,7 +242,7 @@ function BirdPanel({ onSubmit }: Props) {
 }
 
 function AnimalPanel({ onSubmit }: Props) {
-    const [f, setF] = useState({ crop: "maize", growth_stage: "Vegetative", region: "Central India", animal_type: "Wild Boar", field_condition: "Near Forest" });
+    const [f, setF] = useState({ crop: "maize", growth_stage: "Vegetative", region: "Central India", animal_type: "Wild Boar", field_condition: "Near Forest", image_base64: null as string | null });
     const sel = (k: string) => (e: React.ChangeEvent<HTMLSelectElement>) => setF(p => ({ ...p, [k]: e.target.value }));
 
     return (
@@ -206,6 +269,7 @@ function AnimalPanel({ onSubmit }: Props) {
                     </select>
                 </Field>
             </div>
+            <ImageUploadField onImageSelect={(b64) => setF(p => ({ ...p, image_base64: b64 }))} />
             <button style={btnStyle} onClick={() =>
                 onSubmit(`animal protection for ${f.crop} against ${f.animal_type} for field ${f.field_condition}`, { module: "animal", ...f })}>
                 ⚡ Get Animal Protection Plan

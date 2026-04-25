@@ -440,6 +440,7 @@ class BirdInput(BaseModel):
     bird_type: str = "Unknown"
     damage_observed: str = ""
     lang: str = "en"
+    image_base64: Optional[str] = None
 
 @app.post("/api/bird-protection")
 def bird_protection(data: BirdInput):
@@ -447,8 +448,10 @@ def bird_protection(data: BirdInput):
     lang_name = LANG_NAMES.get(data.lang, "English") if "LANG_NAMES" in globals() else "English"
     sys_prompt = f"You are an expert agricultural advisor specializing in bird intrusion protection. Respond in {lang_name}. Return ONLY a valid JSON object with EXACT keys: 'prevention_strategies' (list of strings), 'safe_practices' (list of strings), 'action_suggestion' (string). No markdown blocks."
     prompt = f"Provide bird protection advice for {data.crop} at {data.growth_stage} stage in {data.region}. Suspected bird: {data.bird_type}. Damage: {data.damage_observed}. Format as pure JSON."
+    if data.image_base64:
+         prompt += " Analyze the attached image to identify the bird species or the type of crop damage."
     
-    res = get_llm_response(prompt=prompt, system_prompt=sys_prompt)
+    res = get_llm_response(prompt=prompt, system_prompt=sys_prompt, image_base64=data.image_base64)
     import json
     import re
     try:
@@ -471,6 +474,7 @@ class AnimalInput(BaseModel):
     animal_type: str = "Unknown"
     field_condition: str = "Open Field"
     lang: str = "en"
+    image_base64: Optional[str] = None
 
 @app.post("/api/animal-protection")
 def animal_protection(data: AnimalInput):
@@ -478,8 +482,10 @@ def animal_protection(data: AnimalInput):
     lang_name = LANG_NAMES.get(data.lang, "English") if "LANG_NAMES" in globals() else "English"
     sys_prompt = f"You are an expert agricultural advisor specializing in humane animal intrusion protection. Respond in {lang_name}. Return ONLY a valid JSON object with EXACT keys: 'prevention_strategies' (list of strings), 'safe_practices' (list of strings), 'action_suggestion' (string). No markdown blocks."
     prompt = f"Provide animal protection advice for {data.crop} at {data.growth_stage} stage in {data.region}. Suspected animal: {data.animal_type}. Field condition: {data.field_condition}. Format as pure JSON."
+    if data.image_base64:
+         prompt += " Analyze the attached image to identify the animal, footprint, or damage pattern."
     
-    res = get_llm_response(prompt=prompt, system_prompt=sys_prompt)
+    res = get_llm_response(prompt=prompt, system_prompt=sys_prompt, image_base64=data.image_base64)
     import json
     import re
     try:

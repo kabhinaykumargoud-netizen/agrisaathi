@@ -10,6 +10,7 @@ class PestInput(BaseModel):
     symptoms_observed: str = ""        # User describes symptoms: "yellowing leaves", "holes in leaves"
     region: str = "Central India"      # Geographic region
     lang: str = "en"
+    image_base64: Optional[str] = None # Optional image for visual diagnosis
 
 # Pest/disease risk lookup table per crop + condition
 PEST_LIBRARY = {
@@ -114,22 +115,27 @@ def analyze_pest_risk(data: PestInput) -> dict:
         actions.append("⚠️ Heavy moisture detected: Increase field scouting for fungal spores.")
 
     # 3. AI Intelligence Layer (Symptom Diagnosis)
-    # If the farmer provided symptoms, use the LLM to provide professional diagnosis
+    # If the farmer provided symptoms OR an image, use the LLM to provide professional diagnosis
     ai_diagnosis = ""
-    if data.symptoms_observed.strip():
+    if data.symptoms_observed.strip() or data.image_base64:
         sys_prompt = "You are a professional plant pathologist and agricultural scientist."
         prompt = (
             f"Diagnose this crop issue for a farmer in {data.region}:\n"
             f"Crop: {data.crop} ({data.growth_stage} stage)\n"
             f"Symptoms: {data.symptoms_observed}\n"
             f"Weather: Temp {data.temperature}°C, Hum {data.humidity}%\n\n"
+        )
+        if data.image_base64:
+            prompt += "Please carefully analyze the provided image to identify visual symptoms of disease, pests, or nutrient deficiency.\n\n"
+        
+        prompt += (
             f"Answer in {data.lang}. Provide:\n"
             f"1) PROBABLE CAUSE (Pest/Disease/Nutrient)\n"
             f"2) IMMEDIATE TREATMENT (Chemical/Organic)\n"
             f"3) RED LIST WARNINGS (If contagious)"
         )
-        ai_diagnosis = get_llm_response(prompt, sys_prompt)
-        risk_score += 20 # Symptom presence naturally raises risk
+        ai_diagnosis = get_llm_response(prompt, sys_prompt, image_base64=data.image_base64)
+        risk_score += 20 # Symptom/image presence naturally raises risk
     
     risk_level = "CRITICAL" if risk_score > 70 else ("HIGH" if risk_score >= 50 else ("MEDIUM" if risk_score >= 25 else "LOW"))
     
